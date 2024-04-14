@@ -27,7 +27,7 @@ const ApiWrapper = ({ children }) => {
   const showMessageForFiveSeconds = () => {
     timer = setTimeout(() => {
       setMessage(null);
-    }, 5000);
+    }, 2000);
   };
 
   api.interceptors.request.use(
