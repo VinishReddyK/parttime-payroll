@@ -18,6 +18,10 @@ router.post("/", async (req, res) => {
   try {
     const user = await getUserStmt.get(email);
 
+    if (!user) {
+      return res.status(401).send({ auth: false, message: "User dosent exist" });
+    }
+
     const passwordIsValid = bcrypt.compareSync(password, user.password);
 
     if (!passwordIsValid) {
@@ -34,14 +38,14 @@ router.post("/", async (req, res) => {
       expiresIn: 86400,
     });
 
-    res.status(200).send({ auth: true, token: token, role: userOrg.role });
+    res.status(200).send({ auth: true, token: token, role: userOrg.role, message: "Login Successful" });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ auth: false, message: "Internal Server Error" });
   } finally {
     if (getUserStmt) await getUserStmt.finalize();
     if (userOrgStmt) await userOrgStmt.finalize();
-    db.close();
+    // db.close();
   }
 });
 
