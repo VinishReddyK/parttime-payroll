@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
       expiresIn: 86400,
     });
 
-    res.status(200).send({ auth: true, token: token, role: userOrg.role, message: "Login Successful" });
+    res.status(200).send({ auth: true, token: token, role: userOrg.role, org_id: userOrg.org_id, message: "Login Successful" });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ auth: false, message: "Internal Server Error" });

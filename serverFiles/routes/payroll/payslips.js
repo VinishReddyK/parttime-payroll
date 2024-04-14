@@ -105,7 +105,7 @@ router.post("/generate", async (req, res) => {
     res.status(200).json({ message: "Payslips generated successfully" });
   } catch (error) {
     console.error("Error generating payslips:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -120,7 +120,7 @@ router.get("/:employee_id", async (req, res) => {
     res.status(200).json(Object.values(payslips));
   } catch (error) {
     console.error("Error fetching payslips:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

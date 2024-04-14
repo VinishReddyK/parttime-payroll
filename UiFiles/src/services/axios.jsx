@@ -33,8 +33,10 @@ const ApiWrapper = ({ children }) => {
   api.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token");
+      const org_id = localStorage.getItem("org_id");
       if (token) {
         config.headers["jwt-access-token"] = token;
+        config.headers["saved_org_id"] = org_id;
       }
       return config;
     },
@@ -61,6 +63,7 @@ const ApiWrapper = ({ children }) => {
           localStorage.removeItem("token");
           redirectToLogin();
         } else {
+          console.log(error.response.data);
           setMessage(error.response.data.message || "An error occurred");
           showMessageForFiveSeconds();
         }
@@ -89,6 +92,7 @@ const ApiWrapper = ({ children }) => {
             transform: "translate(-50%, -30%)",
             width: "fit-content",
             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+            zIndex: "999",
           }}
         />
       )}

@@ -17,6 +17,10 @@ function verify(req, res, next) {
     req.org_name = decoded.org_name;
     req.schema_name = decoded.org_id + "_" + decoded.org_name + ".sqlite";
     req.role = decoded.role;
+
+    if (req.headers["saved_org_id"] != req.org_id) {
+      return res.status(440).send({ auth: false, message: "User is not associated with this Org Logging Out" });
+    }
     next();
   });
 }

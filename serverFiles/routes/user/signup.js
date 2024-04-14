@@ -44,11 +44,11 @@ router.post("/", async (req, res) => {
     await db.run("ROLLBACK");
     console.log(error);
     if (error.message === "SQLITE_CONSTRAINT: UNIQUE constraint failed: users.email") {
-      res.status(500).json({ error: "Email is already registerd" });
+      res.status(500).json({ message: "Email is already registerd" });
     } else if (error.message === "SQLITE_CONSTRAINT: UNIQUE constraint failed: organizations.name") {
-      res.status(500).json({ error: "An org is already registerd with this name" });
+      res.status(500).json({ message: "An org is already registerd with this name" });
     } else {
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ message: "Internal server error" });
     }
   } finally {
     if (insertUserStmt) await insertUserStmt.finalize();
@@ -149,7 +149,7 @@ async function createOrgTables(org_id, org_name, res) {
     );
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   } finally {
     await org_db.close();
   }

@@ -58,10 +58,10 @@ router.post("/new", async (req, res) => {
   } catch (error) {
     await db.run("ROLLBACK");
     if (error.message === "SQLITE_CONSTRAINT: UNIQUE constraint failed: users.email") {
-      res.status(500).json({ error: "Email is already registerd" });
+      res.status(500).json({ message: "Email is already registerd" });
     } else {
       console.log(error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ message: "Internal server error" });
     }
   } finally {
     if (insertUserStmt) await insertUserStmt.finalize();
@@ -113,7 +113,7 @@ router.post("/existing", async (req, res) => {
   } catch (error) {
     await db.run("ROLLBACK");
     console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   } finally {
     if (selectUserStmt) await selectUserStmt.finalize();
     if (selectOrgStmt) await selectOrgStmt.finalize();
