@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Button from "@mui/material/Button";
@@ -16,9 +14,19 @@ const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const closeTimeoutRef = useRef();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const handleMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
+    setMobileOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setMobileOpen(false);
+    }, 200); // 200 ms delay before closing the drawer
   };
 
   const handleNavigation = (path) => {
@@ -35,13 +43,14 @@ const Layout = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ zIndex: 1300 }}>
-        <MenuIcon />
-      </IconButton>
+      <Box
+        onMouseEnter={handleMouseEnter}
+        sx={{ zIndex: 1300, width: "30px", height: "100%", position: "fixed" }} // Wider trigger area
+      />
       <Drawer
         variant="temporary"
         open={mobileOpen}
-        onClose={handleDrawerToggle}
+        onMouseEnter={handleMouseEnter}
         ModalProps={{
           keepMounted: true,
         }}
@@ -50,7 +59,7 @@ const Layout = () => {
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
       >
-        <List>
+        <List onMouseLeave={handleMouseLeave} style={{ height: "100%" }}>
           {menuItems.map((item, index) => (
             <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1, padding: 1 }}>
               <Button

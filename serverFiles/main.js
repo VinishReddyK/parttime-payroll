@@ -5,6 +5,7 @@ const signupAPIs = require("./routes/user/signup");
 const loginAPIs = require("./routes/user/login");
 const verify = require("./routes/authentication/verification");
 const addUserAPI = require("./routes/user/addUser");
+const profileAPI = require("./routes/user/profile");
 const scheduleAPIs = require("./routes/employee/schedule");
 const swapAPIs = require("./routes/employee/swap");
 const leaveAPIs = require("./routes/employee/leave");
@@ -29,6 +30,7 @@ app.use("/login", loginAPIs);
 app.use(verify);
 
 app.use("/adduser", addUserAPI);
+app.use("/profile", profileAPI);
 app.use("/schedule", scheduleAPIs);
 app.use("/swap", swapAPIs);
 app.use("/leave", leaveAPIs);
