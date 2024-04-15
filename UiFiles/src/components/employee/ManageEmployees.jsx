@@ -139,13 +139,33 @@ const ManageEmployees = () => {
       <Table style={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Address</TableCell>
-            <TableCell>Phone</TableCell>
-            {role === "ptemployee" && <TableCell>Pay Per Hour</TableCell>}
-            {role === "ptemployee" && <TableCell>Account Number</TableCell>}
-            {role === "ptemployee" && <TableCell>Routing Number</TableCell>}
+            <TableCell>
+              <b>Name</b>
+            </TableCell>
+            <TableCell>
+              <b>Email</b>
+            </TableCell>
+            <TableCell>
+              <b>Address</b>
+            </TableCell>
+            <TableCell>
+              <b>Phone</b>
+            </TableCell>
+            {role === "ptemployee" && (
+              <TableCell>
+                <b>Pay Per Hour</b>
+              </TableCell>
+            )}
+            {role === "ptemployee" && (
+              <TableCell>
+                <b>Account Number</b>
+              </TableCell>
+            )}
+            {role === "ptemployee" && (
+              <TableCell>
+                <b>Routing Number</b>
+              </TableCell>
+            )}
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
