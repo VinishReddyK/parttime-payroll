@@ -92,7 +92,7 @@ const ApiWrapper = ({ children }) => {
             transform: "translate(-50%, -30%)",
             width: "fit-content",
             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-            zIndex: "999",
+            zIndex: "100000",
           }}
         />
       )}

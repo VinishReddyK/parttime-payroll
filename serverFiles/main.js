@@ -14,6 +14,7 @@ const timesheetAPIs = require("./routes/employee/timesheet");
 const taxtypesAPIs = require("./routes/payroll/taxtypes");
 const taxAPIs = require("./routes/payroll/tax");
 const payslipsAPIs = require("./routes/payroll/payslips");
+const employeesAPIs = require("./routes/employee");
 
 const app = express();
 const port = 3000;
@@ -39,6 +40,7 @@ app.use("/timesheet", timesheetAPIs);
 app.use("/taxtypes", taxtypesAPIs);
 app.use("/tax", taxAPIs);
 app.use("/payslips", payslipsAPIs);
+app.use("/employees", employeesAPIs);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);

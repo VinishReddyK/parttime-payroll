@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const { getDatabaseInstance } = require("../../database/start");
 
 const getCurrenOrgtDb = async (req) => {
@@ -10,6 +11,17 @@ const getCurrenOrgtDb = async (req) => {
 const getMaintDb = async () => {
   return await getDatabaseInstance("./Group4_PartPay.sqlite");
 };
+
+async function hash(plain) {
+  const saltRounds = 10;
+  try {
+    const hash = await bcrypt.hash(plain, saltRounds);
+    return hash;
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    throw error;
+  }
+}
 
 router.get("/", async (req, res) => {
   const { role, user_id } = req;
@@ -24,7 +36,7 @@ router.get("/", async (req, res) => {
     const [user] = await db.all(userQuery, [user_id, role]);
 
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(440).json({ message: "User not found" });
       return;
     }
 
@@ -49,20 +61,36 @@ router.get("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-  const { role, user_id } = req;
-  const { name, address, phone, routing_number, account_number } = req.body;
+  const { role, org_id } = req;
+  let { id: user_id } = req.body;
+
+  if (!user_id) {
+    user_id = req.user_id;
+  }
+
+  const { name, address, phone, role: targetRole, password, details } = req.body;
 
   const db = await getMaintDb();
   const org_db = await getCurrenOrgtDb(req);
 
   try {
+    if (details.pay_per_hour && (role === "admin" || role === "manager")) {
+      const passwordUpdateQuery = "UPDATE parttimeemployee SET pay_per_hour = ? WHERE uid = ?";
+      await org_db.run(passwordUpdateQuery, [details.pay_per_hour, user_id]);
+    }
+    if (password && role === "admin") {
+      const hashedPassword = await hash(password);
+      const passwordUpdateQuery = "UPDATE users SET password = ? WHERE id = ?";
+      await db.run(passwordUpdateQuery, [hashedPassword, user_id]);
+    }
+
     const updateQuery = "UPDATE users SET name = ?, address = ?, phone = ? WHERE id = ?";
 
     const result = await db.run(updateQuery, [name, address, phone, user_id]);
 
-    if (role === "ptemployee") {
+    if (targetRole === "ptemployee" || role === "ptemployee") {
       const ptEmployeeUpdateQuery = `UPDATE parttimeemployee SET routing_number = ?, account_number = ? WHERE uid = ?`;
-      const ptResult = await org_db.run(ptEmployeeUpdateQuery, [routing_number, account_number, user_id]);
+      const ptResult = await org_db.run(ptEmployeeUpdateQuery, [details.routing_number, details.account_number, user_id]);
       if (result.changes > 0 && ptResult.changes > 0) {
         res.json({ message: "Profile updated successfully." });
       } else {

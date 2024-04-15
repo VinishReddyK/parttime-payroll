@@ -3,6 +3,7 @@ import Login from "./components/user/Login";
 import Signup from "./components/user/Signup";
 import Profile from "./components/employee/profile";
 import Layout from "./components/Layout";
+import ManageEmployees from "./components/employee/ManageEmployees";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
 
         <Route path="/" element={<Layout />}>
           <Route index element={<Profile />} />
-          {/* <Route path="/" element={<Profile />} /> */}
+          <Route path="/manage" element={<ManageEmployees />} />
         </Route>
       </Routes>
     </>

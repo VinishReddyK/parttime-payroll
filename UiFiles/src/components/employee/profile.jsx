@@ -15,6 +15,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PlaceIcon from "@mui/icons-material/Place";
 import CancelIcon from "@mui/icons-material/Cancel";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -30,8 +31,10 @@ const Profile = () => {
           name: response.data.name,
           address: response.data.address,
           phone: response.data.phone,
-          account_number: response.data.details?.account_number || "",
-          routing_number: response.data.details?.routing_number || "",
+          details: {
+            account_number: response.data.details?.account_number || "",
+            routing_number: response.data.details?.routing_number || "",
+          },
         });
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -42,7 +45,21 @@ const Profile = () => {
   }, []);
 
   const handleEditChange = (field) => (event) => {
-    setEditData({ ...editData, [field]: event.target.value });
+    if (field.includes(".")) {
+      const [nestedField, subField] = field.split(".");
+      setEditData({
+        ...editData,
+        [nestedField]: {
+          ...editData[nestedField],
+          [subField]: event.target.value,
+        },
+      });
+    } else {
+      setEditData({
+        ...editData,
+        [field]: event.target.value,
+      });
+    }
   };
 
   const saveEdits = async () => {
@@ -87,6 +104,18 @@ const Profile = () => {
                   value={userDetails.email}
                   InputProps={{
                     startAdornment: <MailOutlineIcon style={{ marginRight: "10px" }} />,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} style={{ display: "flex", alignItems: "center" }}>
+                <TextField
+                  fullWidth
+                  label="Role"
+                  variant="outlined"
+                  disabled={true}
+                  value={userDetails.role}
+                  InputProps={{
+                    startAdornment: <PersonIcon style={{ marginRight: "10px" }} />,
                   }}
                 />
               </Grid>
@@ -136,8 +165,8 @@ const Profile = () => {
                       label="Account Number"
                       variant="outlined"
                       disabled={!editMode}
-                      value={editData.account_number}
-                      onChange={handleEditChange("account_number")}
+                      value={editData.details.account_number}
+                      onChange={handleEditChange("details.account_number")}
                       InputProps={{
                         startAdornment: <AccountBalanceIcon style={{ marginRight: "10px" }} />,
                       }}
@@ -149,8 +178,8 @@ const Profile = () => {
                       label="Routing Number"
                       variant="outlined"
                       disabled={!editMode}
-                      value={editData.routing_number}
-                      onChange={handleEditChange("routing_number")}
+                      value={editData.details.routing_number}
+                      onChange={handleEditChange("details.routing_number")}
                       InputProps={{
                         startAdornment: <AccountBalanceIcon style={{ marginRight: "10px" }} />,
                       }}

@@ -7,6 +7,7 @@ import ListItem from "@mui/material/ListItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Button from "@mui/material/Button";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 
 const drawerWidth = 240;
 
@@ -15,6 +16,7 @@ const Layout = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimeoutRef = useRef();
+  const role = localStorage.getItem("role");
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -26,7 +28,7 @@ const Layout = () => {
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setMobileOpen(false);
-    }, 200); // 200 ms delay before closing the drawer
+    }, 200);
   };
 
   const handleNavigation = (path) => {
@@ -39,14 +41,14 @@ const Layout = () => {
     handleNavigation("/login");
   };
 
-  const menuItems = [{ text: "Profile", icon: <AccountCircleIcon />, path: "/" }];
+  const menuItems = [
+    { text: "Profile", icon: <AccountCircleIcon />, path: "/" },
+    { text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
+  ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Box
-        onMouseEnter={handleMouseEnter}
-        sx={{ zIndex: 1300, width: "30px", height: "100%", position: "fixed" }} // Wider trigger area
-      />
+      <Box onMouseEnter={handleMouseEnter} sx={{ zIndex: 1300, width: "30px", height: "100%", position: "fixed" }} />
       <Drawer
         variant="temporary"
         open={mobileOpen}
