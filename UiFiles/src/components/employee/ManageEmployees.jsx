@@ -17,6 +17,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Paper,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -134,40 +135,50 @@ const ManageEmployees = () => {
   );
 
   const renderTable = (role) => (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>Email</TableCell>
-          <TableCell>Address</TableCell>
-          <TableCell>Phone</TableCell>
-          {role === "ptemployee" && <TableCell>Pay Per Hour</TableCell>}
-          {role === "ptemployee" && <TableCell>Account Number</TableCell>}
-          {role === "ptemployee" && <TableCell>Routing Number</TableCell>}
-          <TableCell>Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {employees
-          .filter((emp) => emp.role === role)
-          .map((emp) => (
-            <TableRow key={emp.id}>
-              <TableCell>{emp.name}</TableCell>
-              <TableCell>{emp.email}</TableCell>
-              <TableCell>{emp.address || "N/A"}</TableCell>
-              <TableCell>{emp.phone || "N/A"}</TableCell>
-              {role === "ptemployee" && <TableCell>{emp.details?.pay_per_hour}</TableCell>}
-              {role === "ptemployee" && <TableCell>{emp.details?.account_number || "N/A"}</TableCell>}
-              {role === "ptemployee" && <TableCell>{emp.details?.routing_number || "N/A"}</TableCell>}
-              <TableCell>
-                <IconButton onClick={() => handleDialogOpen(emp)}>
-                  <EditIcon />
-                </IconButton>
+    <Paper style={{ overflowX: "auto" }}>
+      <Table style={{ minWidth: 650 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Address</TableCell>
+            <TableCell>Phone</TableCell>
+            {role === "ptemployee" && <TableCell>Pay Per Hour</TableCell>}
+            {role === "ptemployee" && <TableCell>Account Number</TableCell>}
+            {role === "ptemployee" && <TableCell>Routing Number</TableCell>}
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {employees.filter((emp) => emp.role === role).length > 0 ? (
+            employees
+              .filter((emp) => emp.role === role)
+              .map((emp) => (
+                <TableRow key={emp.id}>
+                  <TableCell>{emp.name}</TableCell>
+                  <TableCell>{emp.email}</TableCell>
+                  <TableCell>{emp.address || "N/A"}</TableCell>
+                  <TableCell>{emp.phone || "N/A"}</TableCell>
+                  {role === "ptemployee" && <TableCell>{emp.details?.pay_per_hour}</TableCell>}
+                  {role === "ptemployee" && <TableCell>{emp.details?.account_number || "N/A"}</TableCell>}
+                  {role === "ptemployee" && <TableCell>{emp.details?.routing_number || "N/A"}</TableCell>}
+                  <TableCell>
+                    <IconButton onClick={() => handleDialogOpen(emp)}>
+                      <EditIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={role === "ptemployee" ? 8 : 5} style={{ textAlign: "center" }}>
+                Nobody is here
               </TableCell>
             </TableRow>
-          ))}
-      </TableBody>
-    </Table>
+          )}
+        </TableBody>
+      </Table>
+    </Paper>
   );
 
   return (
