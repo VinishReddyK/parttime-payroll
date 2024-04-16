@@ -34,11 +34,26 @@ router.post("/", async (req, res) => {
       return res.status(404).send({ auth: false, message: "User is not associated with this organization." });
     }
 
-    const token = jwt.sign({ user_id: userOrg.user_id, org_id: userOrg.org_id, role: userOrg.role, org_name }, KEY, {
-      expiresIn: 86400,
-    });
+    org_db = await getDatabaseInstance(userOrg.org_id + "_" + org_name + ".sqlite");
+    orgEmpStmt = "SELECT id from parttimeemployee where uid = ?";
+    const orgEmp = await org_db.get(orgEmpStmt, [userOrg.user_id]);
 
-    res.status(200).send({ auth: true, token: token, role: userOrg.role, org_id: userOrg.org_id, message: "Login Successful" });
+    const token = jwt.sign(
+      { employee_id: orgEmp?.id || null, user_id: userOrg.user_id, org_id: userOrg.org_id, role: userOrg.role, org_name },
+      KEY,
+      {
+        expiresIn: 86400,
+      }
+    );
+
+    res.status(200).send({
+      auth: true,
+      token: token,
+      role: userOrg.role,
+      employee_id: orgEmp?.id || null,
+      org_id: userOrg.org_id,
+      message: "Login Successful",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ auth: false, message: "Internal Server Error" });

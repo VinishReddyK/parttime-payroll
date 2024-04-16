@@ -25,10 +25,11 @@ const Login = () => {
         org_name: orgName,
       });
       if (response.status === 200) {
-        const { token, role, org_id } = response.data;
+        const { token, role, org_id, employee_id } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("org_id", org_id);
+        localStorage.setItem("employee_id", employee_id);
         navigate("/");
       }
     } catch (error) {

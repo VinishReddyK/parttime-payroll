@@ -44,6 +44,7 @@ const Layout = () => {
   const menuItems = [
     { text: "Profile", icon: <AccountCircleIcon />, path: "/" },
     { text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
+    { text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (
