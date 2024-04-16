@@ -57,6 +57,7 @@ const Layout = () => {
     { text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
     { text: "Payroll System configuration", icon: <AccountBalanceIcon />, path: "/tax", roles: ["admin"] },
     { text: "Payslip Generate", icon: <ReceiptLongIcon />, path: "/generate-payslips", roles: ["admin"] },
+    { text: role === "admin" ? "Reports" : "Pay Slips", icon: <ReceiptLongIcon />, path: "/reports", roles: ["admin", "ptemployee"] },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (

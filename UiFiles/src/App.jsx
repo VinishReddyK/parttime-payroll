@@ -11,6 +11,7 @@ import Leave from "./components/employee/Leave";
 import Overtime from "./components/employee/Overtime";
 import TaxDashboard from "./components/payroll/tax";
 import PayslipGenerator from "./components/payroll/GeneratePayroll";
+import Reports from "./components/employee/Reports";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/overtime" element={<Overtime />} />
           <Route path="/tax" element={<TaxDashboard />} />
           <Route path="/generate-payslips" element={<PayslipGenerator />} />
+          <Route path="/reports" element={<Reports />} />
         </Route>
       </Routes>
     </>
