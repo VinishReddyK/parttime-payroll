@@ -14,6 +14,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 const drawerWidth = 240;
 
@@ -57,7 +58,12 @@ const Layout = () => {
     { text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
     { text: "Payroll System configuration", icon: <AccountBalanceIcon />, path: "/tax", roles: ["admin"] },
     { text: "Payslip Generate", icon: <ReceiptLongIcon />, path: "/generate-payslips", roles: ["admin"] },
-    { text: role === "admin" ? "Reports" : "Pay Slips", icon: <ReceiptLongIcon />, path: "/reports", roles: ["admin", "ptemployee"] },
+    {
+      text: role === "admin" ? "Reports" : "Pay Slips",
+      icon: role === "admin" ? <BarChartIcon /> : <ReceiptLongIcon />,
+      path: "/reports",
+      roles: ["admin", "ptemployee"],
+    },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../services/axios";
+import { api } from "../../services/axios";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 const Reports = () => {
@@ -25,35 +25,48 @@ const Reports = () => {
     };
 
     getPayslips();
-  }, [role, userId]);
+  }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell align="right">Employee ID</TableCell>
-            <TableCell align="right">Month</TableCell>
-            <TableCell align="right">Amount</TableCell>
-            <TableCell align="right">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {payslips.map((row) => (
-            <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-              <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell>
-              <TableCell align="right">{row.employee_id}</TableCell>
-              <TableCell align="right">{row.month}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
+    <>
+      <h1>{role === "ptemployee" ? "Pay Slips" : "Reports"}</h1>
+      <TableContainer component={Paper}>
+        <Table aria-label="detailed payslip table">
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell align="right">Employee ID</TableCell>
+              <TableCell align="right">Generated Date</TableCell>
+              <TableCell align="right">From Date</TableCell>
+              <TableCell align="right">To Date</TableCell>
+              <TableCell align="right">Hours Worked</TableCell>
+              <TableCell align="right">Pay per Hour</TableCell>
+              <TableCell align="right">Gross Pay</TableCell>
+              <TableCell align="right">Net Pay</TableCell>
+              <TableCell align="right">Tax ID</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {payslips.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  {row.id}
+                </TableCell>
+                <TableCell align="right">{row.employee_id}</TableCell>
+                <TableCell align="right">{row.generated_date}</TableCell>
+                <TableCell align="right">{row.from_date}</TableCell>
+                <TableCell align="right">{row.to_date}</TableCell>
+                <TableCell align="right">{row.hours_worked}</TableCell>
+                <TableCell align="right">{row.pay_per_hour}</TableCell>
+                <TableCell align="right">{row.gross_pay}</TableCell>
+                <TableCell align="right">{row.net_pay}</TableCell>
+                <TableCell align="right">{row.tax_id}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
