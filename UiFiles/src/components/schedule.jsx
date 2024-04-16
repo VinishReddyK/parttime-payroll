@@ -8,7 +8,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
   Button,
   Dialog,
   DialogActions,
@@ -167,9 +166,7 @@ const Schedules = () => {
 
   return (
     <div>
-      <Typography variant="h4" style={{ margin: "20px 0" }}>
-        Employee Shifts
-      </Typography>
+      <h1>Employee Shifts</h1>
       {role !== "ptemployee" && (
         <Button variant="contained" style={{ margin: "0 0 20px 0" }} color="primary" onClick={() => handleOpen()}>
           Add Schedule

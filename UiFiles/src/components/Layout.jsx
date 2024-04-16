@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import MoreTimeIcon from "@mui/icons-material/MoreTime";
 
 const drawerWidth = 240;
 
@@ -49,6 +51,8 @@ const Layout = () => {
     { text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
     { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["scheduler", "manager", "ptemployee"] },
     { text: "Swap Shifts", icon: <SwapHorizIcon />, path: "/swap", roles: ["manager", "ptemployee"] },
+    { text: "Leaves", icon: <CalendarTodayIcon />, path: "/leave", roles: ["manager", "ptemployee"] },
+    { text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (
