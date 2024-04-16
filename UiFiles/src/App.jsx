@@ -9,6 +9,7 @@ import Schedules from "./components/schedule";
 import Swap from "./components/employee/Swap";
 import Leave from "./components/employee/Leave";
 import Overtime from "./components/employee/Overtime";
+import TaxDashboard from "./components/payroll/tax";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/swap" element={<Swap />} />
           <Route path="/leave" element={<Leave />} />
           <Route path="/overtime" element={<Overtime />} />
+          <Route path="/tax" element={<TaxDashboard />} />
         </Route>
       </Routes>
     </>

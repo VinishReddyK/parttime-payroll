@@ -13,6 +13,7 @@ router.post("/new", async (req, res) => {
   const { name, tax_types: taxTypes } = req.body;
 
   try {
+    await org_db.exec("BEGIN");
     const insertTaxInfoStmt = await org_db.prepare("INSERT INTO taxinformation (name) VALUES (?)");
     const { lastID } = await insertTaxInfoStmt.run(name);
     await insertTaxInfoStmt.finalize();
@@ -22,11 +23,19 @@ router.post("/new", async (req, res) => {
       await insertTaxTypeStmt.run(lastID, taxTypeId);
     }
     await insertTaxTypeStmt.finalize();
-
-    res.status(201).json({ message: "Tax information created successfully." });
+    await org_db.exec("COMMIT");
+    res.status(201).json({
+      id: lastID,
+      name,
+      tax_types: taxTypes.map((t) => {
+        return { tax_type_id: t };
+      }),
+      message: "Tax information created successfully.",
+    });
   } catch (err) {
+    await org_db.exec("ROLLBACK");
     console.error("Error creating tax information:", err);
-    res.status(500).json({ message: "Error creating tax information." });
+    res.status(500).json({ message: "Error creating tax information please check id's of tax types." });
   }
 });
 
@@ -85,6 +94,7 @@ router.put("/:id", async (req, res) => {
   const { name, tax_types: taxTypes } = req.body;
 
   try {
+    await org_db.exec("BEGIN");
     // Delete existing tax types associated with the tax information entry
     const deleteTaxTypeStmt = await org_db.prepare("DELETE FROM taxtaxtype WHERE tax_information_id = ?");
     await deleteTaxTypeStmt.run(id);
@@ -101,11 +111,19 @@ router.put("/:id", async (req, res) => {
       await insertTaxTypeStmt.run(id, taxTypeId);
     }
     await insertTaxTypeStmt.finalize();
-
-    res.json({ message: "Tax information updated successfully." });
+    await org_db.exec("COMMIT");
+    res.json({
+      id,
+      name,
+      tax_types: taxTypes.map((t) => {
+        return { tax_type_id: t };
+      }),
+      message: "Tax information updated successfully.",
+    });
   } catch (err) {
+    await org_db.exec("ROLLBACK");
     console.error("Error updating tax information:", err);
-    res.status(500).json({ message: "Error updating tax information." });
+    res.status(500).json({ message: "Error updating tax information please check id's of tax types." });
   }
 });
 
@@ -115,6 +133,7 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
+    await org_db.exec("BEGIN");
     const deleteTaxInfoStmt = await org_db.prepare("DELETE FROM taxinformation WHERE id = ?");
     await deleteTaxInfoStmt.run(id);
     await deleteTaxInfoStmt.finalize();
@@ -122,9 +141,10 @@ router.delete("/:id", async (req, res) => {
     const deleteTaxTypeStmt = await org_db.prepare("DELETE FROM taxtaxtype WHERE tax_information_id = ?");
     await deleteTaxTypeStmt.run(id);
     await deleteTaxTypeStmt.finalize();
-
+    await org_db.exec("COMMIT");
     res.json({ message: "Tax information deleted successfully." });
   } catch (err) {
+    await org_db.exec("ROLLBACK");
     console.error("Error deleting tax information:", err);
     res.status(500).json({ message: "Error deleting tax information." });
   }

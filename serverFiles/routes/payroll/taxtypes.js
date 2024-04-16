@@ -14,9 +14,9 @@ router.post("/new", async (req, res) => {
 
   try {
     const stmt = await org_db.prepare("INSERT INTO taxtypes (name, deduction_percentage) VALUES (?, ?)");
-    await stmt.run(name, deduction_percentage);
+    const { lastID } = await stmt.run(name, deduction_percentage);
     await stmt.finalize();
-    res.status(201).json({ message: "Tax type created successfully." });
+    res.status(201).json({ id: lastID, name, deduction_percentage, message: "Tax type created successfully." });
   } catch (err) {
     console.error("Error creating tax type:", err);
     res.status(500).json({ message: "Error creating tax type." });
@@ -69,7 +69,7 @@ router.put("/:id", async (req, res) => {
     const stmt = await org_db.prepare("UPDATE taxtypes SET name = ?, deduction_percentage = ? WHERE id = ?");
     await stmt.run(name, deduction_percentage, id);
     await stmt.finalize();
-    res.json({ message: "Tax type updated successfully." });
+    res.json({ id, name, deduction_percentage, message: "Tax type updated successfully." });
   } catch (err) {
     console.error("Error updating tax type:", err);
     res.status(500).json({ message: "Error updating tax type." });
