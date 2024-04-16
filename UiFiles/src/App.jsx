@@ -5,6 +5,7 @@ import Profile from "./components/employee/profile";
 import Layout from "./components/Layout";
 import ManageEmployees from "./components/user/ManageEmployees";
 import Timesheet from "./components/employee/Timesheet";
+import Schedules from "./components/schedule";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route index element={<Profile />} />
           <Route path="/manage" element={<ManageEmployees />} />
           <Route path="/timesheet" element={<Timesheet />} />
+          <Route path="/schedules" element={<Schedules />} />
         </Route>
       </Routes>
     </>

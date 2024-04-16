@@ -8,6 +8,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Button from "@mui/material/Button";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 const drawerWidth = 240;
 
@@ -45,6 +46,7 @@ const Layout = () => {
     { text: "Profile", icon: <AccountCircleIcon />, path: "/" },
     { text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
     { text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
+    { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["scheduler"] },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (

@@ -23,6 +23,29 @@ async function hash(plain) {
   }
 }
 
+router.get("/employees", async (req, res) => {
+  try {
+    const db = await getMaintDb();
+    const org_db = await getCurrenOrgtDb(req);
+
+    const employeQuery = "SELECT id, uid from parttimeemployee";
+    let result = await org_db.all(employeQuery);
+
+    const employees = await Promise.all(
+      result.map(async (employee) => {
+        const userQuery = "SELECT name from users where id = ?";
+        const userResult = await db.get(userQuery, employee.uid);
+        return { id: employee.id, name: userResult.name };
+      })
+    );
+
+    res.json(employees);
+  } catch (error) {
+    console.error("Failed to retrieve employees:", error);
+    res.status(500).json({ message: "Error retrieving employees" });
+  }
+});
+
 router.get("/", async (req, res) => {
   const { role, user_id } = req;
   const org_db = await getCurrenOrgtDb(req);
