@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import ManageEmployees from "./components/user/ManageEmployees";
 import Timesheet from "./components/employee/Timesheet";
 import Schedules from "./components/schedule";
+import Swap from "./components/employee/Swap";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/manage" element={<ManageEmployees />} />
           <Route path="/timesheet" element={<Timesheet />} />
           <Route path="/schedules" element={<Schedules />} />
+          <Route path="/swap" element={<Swap />} />
         </Route>
       </Routes>
     </>

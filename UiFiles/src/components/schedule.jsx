@@ -31,6 +31,8 @@ const Schedules = () => {
   const [open, setOpen] = useState(false);
   const [currentSchedule, setCurrentSchedule] = useState({ employee_id: "", date: "", start_time: "", end_time: "" });
   const [isEditing, setIsEditing] = useState(false);
+  const role = localStorage.getItem("role");
+  const userId = localStorage.getItem("employee_id");
 
   useEffect(() => {
     fetchEmployees();
@@ -49,7 +51,12 @@ const Schedules = () => {
   const fetchSchedules = async () => {
     try {
       const { data } = await api.get("/schedule");
-      setSchedules(data);
+      if (role === "ptemployee") {
+        const filteredSchedules = data.filter((schedule) => schedule.employee_id == userId);
+        setSchedules(filteredSchedules);
+      } else {
+        setSchedules(data);
+      }
     } catch (error) {
       console.error("Failed to fetch schedules:", error);
     }
@@ -163,37 +170,43 @@ const Schedules = () => {
       <Typography variant="h4" style={{ margin: "20px 0" }}>
         Employee Shifts
       </Typography>
-      <Button variant="contained" style={{ margin: "0 0 20px 0" }} color="primary" onClick={() => handleOpen()}>
-        Add Schedule
-      </Button>
+      {role !== "ptemployee" && (
+        <Button variant="contained" style={{ margin: "0 0 20px 0" }} color="primary" onClick={() => handleOpen()}>
+          Add Schedule
+        </Button>
+      )}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Employee ID</TableCell>
-              <TableCell>Employee Name</TableCell>
+              {role !== "ptemployee" && <TableCell>Employee Name</TableCell>}
               <TableCell>Date</TableCell>
               <TableCell>Start Time</TableCell>
               <TableCell>End Time</TableCell>
-              <TableCell>Actions</TableCell>
+              {role !== "ptemployee" && <TableCell>Actions</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
             {schedules.map((schedule, index) => (
               <TableRow key={index}>
                 <TableCell>{schedule.employee_id}</TableCell>
-                <TableCell>{employees.find((emp) => emp.id === schedule.employee_id)?.name || "Unknown"}</TableCell>
+                {role !== "ptemployee" && (
+                  <TableCell>{employees.find((emp) => emp.id === schedule.employee_id)?.name || "Unknown"}</TableCell>
+                )}
                 <TableCell>{schedule.date}</TableCell>
                 <TableCell>{schedule.start_time}</TableCell>
                 <TableCell>{schedule.end_time}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => handleOpen(schedule)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(schedule.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+                {role !== "ptemployee" && (
+                  <TableCell>
+                    <IconButton onClick={() => handleOpen(schedule)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(schedule.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

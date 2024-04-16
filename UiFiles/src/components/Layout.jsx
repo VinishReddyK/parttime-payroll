@@ -9,6 +9,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Button from "@mui/material/Button";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 
 const drawerWidth = 240;
 
@@ -46,7 +47,8 @@ const Layout = () => {
     { text: "Profile", icon: <AccountCircleIcon />, path: "/" },
     { text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
     { text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
-    { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["scheduler"] },
+    { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["scheduler", "manager", "ptemployee"] },
+    { text: "Swap Shifts", icon: <SwapHorizIcon />, path: "/swap", roles: ["manager", "ptemployee"] },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (
