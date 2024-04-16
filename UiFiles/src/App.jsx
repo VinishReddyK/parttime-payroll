@@ -10,6 +10,7 @@ import Swap from "./components/employee/Swap";
 import Leave from "./components/employee/Leave";
 import Overtime from "./components/employee/Overtime";
 import TaxDashboard from "./components/payroll/tax";
+import PayslipGenerator from "./components/payroll/GeneratePayroll";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/leave" element={<Leave />} />
           <Route path="/overtime" element={<Overtime />} />
           <Route path="/tax" element={<TaxDashboard />} />
+          <Route path="/generate-payslips" element={<PayslipGenerator />} />
         </Route>
       </Routes>
     </>

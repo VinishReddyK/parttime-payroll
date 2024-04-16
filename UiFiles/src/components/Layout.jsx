@@ -13,6 +13,7 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 
 const drawerWidth = 240;
 
@@ -55,6 +56,7 @@ const Layout = () => {
     { text: "Leaves", icon: <CalendarTodayIcon />, path: "/leave", roles: ["manager", "ptemployee"] },
     { text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
     { text: "Payroll System configuration", icon: <AccountBalanceIcon />, path: "/tax", roles: ["admin"] },
+    { text: "Payslip Generate", icon: <ReceiptLongIcon />, path: "/generate-payslips", roles: ["admin"] },
   ].filter((item) => !item.roles || item.roles.includes(role));
 
   return (

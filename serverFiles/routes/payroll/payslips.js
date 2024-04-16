@@ -124,4 +124,18 @@ router.get("/:employee_id", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  const org_db = await getCurrentDb(req);
+
+  try {
+    const payslipsQuery = "SELECT * FROM payslips;";
+    const payslips = await org_db.all(payslipsQuery);
+
+    res.status(200).json(Object.values(payslips));
+  } catch (error) {
+    console.error("Error fetching payslips:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
