@@ -18,7 +18,7 @@ router.post("/new", async (req, res) => {
   const { name, email, password, role, pay_per_hour } = req.body;
   const org_name = req.org_name;
 
-  const db = await getDatabaseInstance("./Group4_PartPay.sqlite");
+  const db = await getDatabaseInstance("./parttime_payroll.sqlite");
 
   const insertUserStmt = await db.prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
   const selectOrgStmt = await db.prepare("SELECT * from organizations WHERE name = ?");
@@ -75,7 +75,7 @@ router.post("/existing", async (req, res) => {
   const { email, role, pay_per_hour } = req.body;
   const org_name = req.org_name;
 
-  const db = await getDatabaseInstance("./Group4_PartPay.sqlite");
+  const db = await getDatabaseInstance("./parttime_payroll.sqlite");
 
   const selectUserStmt = await db.prepare("SELECT * from users WHERE email = ?");
   const selectOrgStmt = await db.prepare("SELECT * from organizations WHERE name = ?");

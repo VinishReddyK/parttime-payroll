@@ -9,7 +9,7 @@ const getCurrenOrgtDb = async (req) => {
 };
 
 const getMaintDb = async () => {
-  return await getDatabaseInstance("./Group4_PartPay.sqlite");
+  return await getDatabaseInstance("./parttime_payroll.sqlite");
 };
 
 async function hash(plain) {

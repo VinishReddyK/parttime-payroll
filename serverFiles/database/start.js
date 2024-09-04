@@ -19,7 +19,7 @@ async function getDatabaseInstance(filename) {
 }
 
 const initDatabase = async () => {
-  const db = await getDatabaseInstance("./Group4_PartPay.sqlite");
+  const db = await getDatabaseInstance("./parttime_payroll.sqlite");
   try {
     await db.run(`CREATE TABLE IF NOT EXISTS organizations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

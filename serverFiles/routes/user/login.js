@@ -7,7 +7,7 @@ const { getDatabaseInstance } = require("../../database/start");
 KEY = "7b#E9qR$3tP*5yF!2gM6hN@4wC+8vA1zG$4h&L8zP!s7R#9XmY2cQ+6dF1a@3VnE*5";
 
 router.post("/", async (req, res) => {
-  db = await getDatabaseInstance("./Group4_PartPay.sqlite");
+  db = await getDatabaseInstance("./parttime_payroll.sqlite");
   const { email, password, org_name } = req.body;
 
   const getUserStmt = await db.prepare("SELECT * FROM users WHERE email = ?");

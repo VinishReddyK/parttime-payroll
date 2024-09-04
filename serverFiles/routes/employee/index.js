@@ -8,7 +8,7 @@ const getCurrentOrgDb = async (req) => {
 };
 
 const getMainDb = async () => {
-  return await getDatabaseInstance("./Group4_PartPay.sqlite");
+  return await getDatabaseInstance("./parttime_payroll.sqlite");
 };
 
 router.get("/", async (req, res) => {
