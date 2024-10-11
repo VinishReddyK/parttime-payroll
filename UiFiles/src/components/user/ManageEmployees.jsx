@@ -129,7 +129,6 @@ const ManageEmployees = () => {
       <Select label="Role" name="role" disabled={isEditing} value={editableEmployee.role} onChange={handleChange}>
         <MenuItem value="ptemployee">Part-Time Employee</MenuItem>
         <MenuItem value="manager">Manager</MenuItem>
-        <MenuItem value="scheduler">Scheduler</MenuItem>
       </Select>
     </FormControl>
   );
@@ -289,7 +288,7 @@ const ManageEmployees = () => {
           <Button onClick={saveEmployee}>Save</Button>
         </DialogActions>
       </Dialog>
-      {(role === "admin" ? ["ptemployee", "manager", "scheduler"] : ["ptemployee", "scheduler"]).map((role) => (
+      {(role === "admin" ? ["ptemployee", "manager"] : ["ptemployee"]).map((role) => (
         <div key={role}>
           <h2>{role.charAt(0).toUpperCase() + role.slice(1)}</h2>
           {renderTable(role)}

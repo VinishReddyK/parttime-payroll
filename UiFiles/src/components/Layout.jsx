@@ -35,7 +35,7 @@ const Layout = () => {
     { text: "Profile", icon: <AccountCircleIcon />, path: "/" },
     { text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
     { text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
-    { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["scheduler", "manager", "ptemployee"] },
+    { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["manager", "ptemployee"] },
     { text: "Swap Shifts", icon: <SwapHorizIcon />, path: "/swap", roles: ["manager", "ptemployee"] },
     { text: "Leaves", icon: <CalendarTodayIcon />, path: "/leave", roles: ["manager", "ptemployee"] },
     { text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
