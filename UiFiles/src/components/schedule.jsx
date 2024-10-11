@@ -176,7 +176,8 @@ const Schedules = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Employee ID</TableCell>
+              {role !== "ptemployee" && <TableCell>Employee ID</TableCell>}
+              <TableCell>Shift ID</TableCell>
               {role !== "ptemployee" && <TableCell>Employee Name</TableCell>}
               <TableCell>Date</TableCell>
               <TableCell>Start Time</TableCell>
@@ -187,10 +188,11 @@ const Schedules = () => {
           <TableBody>
             {schedules.map((schedule, index) => (
               <TableRow key={index}>
-                <TableCell>{schedule.employee_id}</TableCell>
+                {role !== "ptemployee" && <TableCell>{schedule.employee_id}</TableCell>}
                 {role !== "ptemployee" && (
                   <TableCell>{employees.find((emp) => emp.id === schedule.employee_id)?.name || "Unknown"}</TableCell>
                 )}
+                <TableCell>{schedule.id}</TableCell>
                 <TableCell>{schedule.date}</TableCell>
                 <TableCell>{schedule.start_time}</TableCell>
                 <TableCell>{schedule.end_time}</TableCell>

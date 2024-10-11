@@ -28,9 +28,9 @@ const Profile = () => {
         const response = await api.get("/profile");
         setUserDetails(response.data);
         setEditData({
-          name: response.data.name,
-          address: response.data.address,
-          phone: response.data.phone,
+          name: response.data.name || "",
+          address: response.data.address || "",
+          phone: response.data.phone || "",
           details: {
             account_number: response.data.details?.account_number || "",
             routing_number: response.data.details?.routing_number || "",

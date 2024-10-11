@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react";
 import { api } from "../../services/axios";
-import { Button, Card, CardContent, Typography, Box, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  Button,
+  Card,
+  Paper,
+  CardContent,
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+} from "@mui/material";
 import TimesheetModal from "./TimesheetModal";
 
 const Timesheet = () => {
   const [timesheets, setTimesheets] = useState([]);
   const [currentUserTimesheet, setCurrentUserTimesheet] = useState(null);
   const [timer, setTimer] = useState(null);
-  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [timeElapsed, setTimeElapsed] = useState("00:00");
   const [totalHoursToday, setTotalHoursToday] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -40,7 +53,7 @@ const Timesheet = () => {
   };
 
   const handleModalOpen = (data = null) => {
-    setEditData(data);
+    setEditData({ ...data });
     setModalOpen(true);
   };
 
@@ -49,47 +62,60 @@ const Timesheet = () => {
   };
 
   const handleModalSubmit = (formData) => {
-    console.log(formData);
-    if (editData) {
-      editTimesheet(editData.id, formData);
+    if (editData.id) {
+      editTimesheet(editData.id, {
+        date: formData.date,
+        actual_start_time: formData.startTime,
+        actual_end_time: formData.endTime,
+      });
     } else {
-      createNewTimesheet(formData);
+      createNewTimesheet({
+        date: formData.date,
+        actual_start_time: formData.startTime,
+        actual_end_time: formData.endTime,
+      });
     }
+    setEditData(null);
+    handleModalClose();
   };
 
   const checkCurrentDayTimesheet = (timesheets) => {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getCurrentTimeInCDT().toISOString().slice(0, 10);
     const todayTimesheet = timesheets.find((ts) => ts.date === today);
     setCurrentUserTimesheet(todayTimesheet);
     if (todayTimesheet && todayTimesheet.actual_end_time) {
-      calculateTotalHours(todayTimesheet);
+      setTotalHoursToday(timeDifference(todayTimesheet.actual_start_time, todayTimesheet.actual_end_time));
     }
   };
 
+  function timeDifference(startTime, endTime) {
+    const startParts = startTime.split(":").map(Number);
+    const endParts = endTime.split(":").map(Number);
+    const startTotalMinutes = startParts[0] * 60 + startParts[1];
+    const endTotalMinutes = endParts[0] * 60 + endParts[1];
+    let difference = endTotalMinutes - startTotalMinutes;
+    const hours = Math.floor(difference / 60);
+    const minutes = difference % 60;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  }
+
   const startTimer = () => {
-    const startTime = new Date(currentUserTimesheet.actual_start_time).getTime();
+    const startTimeString = currentUserTimesheet.actual_start_time;
     setTimer(
       setInterval(() => {
-        setTimeElapsed(Math.floor((Date.now() - startTime) / 1000));
+        const endTimeString = getCurrentTimeInCDT().toISOString().slice(11, 16);
+        setTimeElapsed(timeDifference(startTimeString, endTimeString));
       }, 1000)
     );
   };
 
-  const calculateTotalHours = (timesheet) => {
-    const startTime = new Date(timesheet.actual_start_time);
-    const endTime = new Date(timesheet.actual_end_time);
-    const duration = (endTime - startTime) / 3600000;
-    setTotalHoursToday(duration.toFixed(2));
-  };
-
   const createNewTimesheet = async (formData) => {
-    // This example assumes a modal or form input for creation details.
     const userId = localStorage.getItem("employee_id");
     const newTimesheet = {
       employee_id: parseInt(userId),
       date: formData.date,
-      actual_start_time: new Date(`${formData.date}T${formData.startTime}:00.000Z`).toISOString(),
-      actual_end_time: formData.endTime ? new Date(`${formData.date}T${formData.endTime}:00.000Z`).toISOString() : null,
+      actual_start_time: formData.actual_start_time,
+      actual_end_time: formData?.actual_end_time,
     };
     try {
       await api.post("/timesheet/new", newTimesheet);
@@ -99,12 +125,21 @@ const Timesheet = () => {
     }
   };
 
+  function getCurrentTimeInCDT() {
+    const now = new Date();
+    const cdtOffset = -5; // CDT is UTC-5
+    const cdtDate = new Date(now.getTime() + cdtOffset * 60 * 60 * 1000);
+    return cdtDate;
+  }
+
   const clockIn = async () => {
     const userId = localStorage.getItem("employee_id");
+    const cdtTime = getCurrentTimeInCDT();
+
     const newTimesheet = {
       employee_id: parseInt(userId),
-      date: new Date().toISOString().slice(0, 10),
-      actual_start_time: new Date().toISOString(),
+      date: cdtTime.toISOString().slice(0, 10),
+      actual_start_time: cdtTime.toISOString().slice(11, 16),
       actual_end_time: null,
     };
 
@@ -121,15 +156,17 @@ const Timesheet = () => {
       clearInterval(timer);
     }
 
+    const cdtTime = getCurrentTimeInCDT();
+
     const updatedTimesheet = {
       ...currentUserTimesheet,
-      actual_end_time: new Date().toISOString(),
+      actual_end_time: cdtTime.toISOString().slice(11, 16),
     };
 
     try {
       await api.put(`/timesheet/${currentUserTimesheet.id}`, updatedTimesheet);
-      calculateTotalHours(updatedTimesheet);
       fetchTimesheets();
+      setTotalHoursToday(timeDifference(updatedTimesheet.actual_start_time, updatedTimesheet.actual_end_time));
     } catch (error) {
       console.error("Error clocking out:", error);
     }
@@ -141,8 +178,8 @@ const Timesheet = () => {
       await api.put(`/timesheet/${id}`, {
         employee_id: parseInt(userId),
         date: formData.date,
-        actual_start_time: new Date(`${formData.date}T${formData.startTime}`).toLocaleString(),
-        actual_end_time: formData.endTime ? new Date(`${formData.date}T${formData.endTime}`).toLocaleString() : null,
+        actual_start_time: formData.actual_start_time,
+        actual_end_time: formData?.actual_end_time,
       });
       fetchTimesheets();
     } catch (error) {
@@ -158,47 +195,40 @@ const Timesheet = () => {
       console.error("Error deleting timesheet:", error);
     }
   };
-
-  const formatTimeForDisplay = (isoString) => {
-    if (!isoString) return "-";
-    const date = new Date(isoString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
-  };
-
   const renderTimesheetTable = () => (
-    <Table sx={{ minWidth: 650 }}>
-      <TableHead>
-        <TableRow>
-          <TableCell>Date</TableCell>
-          <TableCell align="right">Start Time</TableCell>
-          <TableCell align="right">End Time</TableCell>
-          <TableCell align="right">Total Hours</TableCell>
-          <TableCell align="right">Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {timesheets.map((row) => (
-          <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-            <TableCell component="th" scope="row">
-              {row.date}
-            </TableCell>
-            <TableCell align="right">{formatTimeForDisplay(row.actual_start_time)}</TableCell>
-            <TableCell align="right">{formatTimeForDisplay(row.actual_end_time)}</TableCell>
-            <TableCell align="right">
-              {row.actual_end_time ? ((new Date(row.actual_end_time) - new Date(row.actual_start_time)) / 3600000).toFixed(2) : "-"}
-            </TableCell>
-            <TableCell align="right">
-              <Button key={row.id} onClick={() => handleModalOpen(row)}>
-                Edit
-              </Button>
-              <Button color="error" onClick={() => deleteTimesheet(row.id)}>
-                Delete
-              </Button>
-            </TableCell>
+    <TableContainer sx={{ mt: 2 }} component={Paper}>
+      <Table sx={{ minWidth: 650 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Date</TableCell>
+            <TableCell align="right">Start Time</TableCell>
+            <TableCell align="right">End Time</TableCell>
+            <TableCell align="right">Total Hours</TableCell>
+            <TableCell align="right">Actions</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHead>
+        <TableBody>
+          {timesheets.map((row) => (
+            <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              <TableCell component="th" scope="row">
+                {row.date}
+              </TableCell>
+              <TableCell align="right">{row.actual_start_time}</TableCell>
+              <TableCell align="right">{row.actual_end_time}</TableCell>
+              <TableCell align="right">{row.actual_end_time ? timeDifference(row.actual_start_time, row.actual_end_time) : "-"}</TableCell>
+              <TableCell align="right">
+                <Button key={row.id} onClick={() => handleModalOpen(row)}>
+                  Edit
+                </Button>
+                <Button color="error" onClick={() => deleteTimesheet(row.id)}>
+                  Delete
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 
   return (
@@ -222,11 +252,7 @@ const Timesheet = () => {
             ) : (
               <Box>
                 <Typography variant="h1" style={{ color: "#0F9D58" }} sx={{ mb: 2 }}>
-                  {`${Math.floor(timeElapsed / 3600)
-                    .toString()
-                    .padStart(2, "0")}:${Math.floor((timeElapsed % 3600) / 60)
-                    .toString()
-                    .padStart(2, "0")}:${(timeElapsed % 60).toString().padStart(2, "0")}`}
+                  {timeElapsed}
                 </Typography>
                 <Button variant="contained" color="primary" size="large" onClick={clockOut}>
                   Clock Out
@@ -240,12 +266,14 @@ const Timesheet = () => {
           )}
         </CardContent>
       </Card>
+
       <Box sx={{ mt: 2 }}>
         <Button variant="contained" color="primary" onClick={() => handleModalOpen()}>
           Create New Timesheet
         </Button>
+        {renderTimesheetTable()}
       </Box>
-      {renderTimesheetTable()}
+
       <TimesheetModal open={modalOpen} handleClose={handleModalClose} handleSubmit={handleModalSubmit} initialData={editData} />
     </>
   );

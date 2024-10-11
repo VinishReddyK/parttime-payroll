@@ -180,7 +180,7 @@ const Swap = () => {
                   return true;
                 }
                 if (sr.status === "approved") {
-                  return false;
+                  return schedules.find((s) => s.id == sr.targetshiftid)?.employee_id == userId;
                 }
                 return schedules.find((s) => s.id == sr.shiftid)?.employee_id == userId;
               })

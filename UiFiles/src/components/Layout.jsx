@@ -1,4 +1,3 @@
-import { useState, useRef } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -21,25 +20,9 @@ const drawerWidth = 240;
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const closeTimeoutRef = useRef();
   const role = localStorage.getItem("role");
 
-  const handleMouseEnter = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    setMobileOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setMobileOpen(false);
-    }, 200);
-  };
-
   const handleNavigation = (path) => {
-    setMobileOpen(false);
     navigate(path);
   };
 
@@ -68,20 +51,20 @@ const Layout = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Box onMouseEnter={handleMouseEnter} sx={{ zIndex: 1300, width: "30px", height: "100%", position: "fixed" }} />
+      <Box sx={{ zIndex: 1300, width: "30px", height: "100%" }} />
       <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onMouseEnter={handleMouseEnter}
-        ModalProps={{
-          keepMounted: true,
-        }}
         sx={{
-          display: { xs: "block", sm: "block", zIndex: "13001" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
         }}
+        variant="permanent"
+        anchor="left"
       >
-        <List onMouseLeave={handleMouseLeave} style={{ height: "100%" }}>
+        <List style={{ height: "100%" }}>
           {menuItems.map((item, index) => (
             <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1, padding: 1 }}>
               <Button
@@ -119,7 +102,7 @@ const Layout = () => {
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, bgcolor: "background.default", p: 3, height: "100vh" }}>
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}>
         <Outlet />
       </Box>
     </Box>
