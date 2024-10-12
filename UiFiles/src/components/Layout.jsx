@@ -32,15 +32,15 @@ const Layout = () => {
   };
 
   const menuItems = [
-    { text: "Profile", icon: <AccountCircleIcon />, path: "/" },
-    { text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
-    { text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
-    { text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["manager", "ptemployee"] },
-    { text: "Swap Shifts", icon: <SwapHorizIcon />, path: "/swap", roles: ["manager", "ptemployee"] },
-    { text: "Leaves", icon: <CalendarTodayIcon />, path: "/leave", roles: ["manager", "ptemployee"] },
-    { text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
-    { text: "Payroll System configuration", icon: <AccountBalanceIcon />, path: "/tax", roles: ["admin"] },
-    { text: "Payslip Generate", icon: <ReceiptLongIcon />, path: "/generate-payslips", roles: ["admin"] },
+    { name: "profile", text: "Profile", icon: <AccountCircleIcon />, path: "/" },
+    { name: "manage-profiles", text: "Manage Profiles", icon: <SupervisorAccountIcon />, path: "/manage", roles: ["admin", "manager"] },
+    { name: "timesheet", text: "Timesheet", icon: <SupervisorAccountIcon />, path: "/timesheet", roles: ["ptemployee"] },
+    { name: "schedules", text: "Schedules", icon: <ScheduleIcon />, path: "/schedules", roles: ["manager", "ptemployee"] },
+    { name: "swap-shifts", text: "Swap Shifts", icon: <SwapHorizIcon />, path: "/swap", roles: ["manager", "ptemployee"] },
+    { name: "leaves", text: "Leaves", icon: <CalendarTodayIcon />, path: "/leave", roles: ["manager", "ptemployee"] },
+    { name: "overtime", text: "Overtime", icon: <MoreTimeIcon />, path: "/overtime", roles: ["manager", "ptemployee"] },
+    { name: "payroll", text: "Payroll System configuration", icon: <AccountBalanceIcon />, path: "/tax", roles: ["admin"] },
+    { name: "payslip-generate", text: "Payslip Generate", icon: <ReceiptLongIcon />, path: "/generate-payslips", roles: ["admin"] },
     {
       text: role === "admin" ? "Reports" : "Pay Slips",
       icon: role === "admin" ? <BarChartIcon /> : <ReceiptLongIcon />,
@@ -69,6 +69,7 @@ const Layout = () => {
             <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1, padding: 1 }}>
               <Button
                 variant="contained"
+                name={item.name}
                 color={location.pathname === item.path ? "primary" : "secondary"}
                 startIcon={item.icon}
                 onClick={() => handleNavigation(item.path)}

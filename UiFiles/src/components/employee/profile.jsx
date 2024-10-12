@@ -86,6 +86,7 @@ const Profile = () => {
                 <TextField
                   fullWidth
                   label="Name"
+                  name="name"
                   variant="outlined"
                   disabled={!editMode}
                   value={editData.name}
@@ -99,6 +100,7 @@ const Profile = () => {
                 <TextField
                   fullWidth
                   label="Email"
+                  name="email"
                   variant="outlined"
                   disabled={true}
                   value={userDetails.email}
@@ -111,6 +113,7 @@ const Profile = () => {
                 <TextField
                   fullWidth
                   label="Role"
+                  name="role"
                   variant="outlined"
                   disabled={true}
                   value={userDetails.role}
@@ -123,6 +126,7 @@ const Profile = () => {
                 <TextField
                   fullWidth
                   label="Address"
+                  name="address"
                   variant="outlined"
                   disabled={!editMode}
                   value={editData.address}
@@ -136,6 +140,7 @@ const Profile = () => {
                 <TextField
                   fullWidth
                   label="Phone"
+                  name="phone"
                   variant="outlined"
                   disabled={!editMode}
                   value={editData.phone}
@@ -151,6 +156,7 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Pay Per Hour"
+                      name="pay-per-hour"
                       variant="outlined"
                       disabled={true}
                       value={userDetails.details.pay_per_hour}
@@ -163,6 +169,7 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Account Number"
+                      name="account-number"
                       variant="outlined"
                       disabled={!editMode}
                       value={editData.details.account_number}
@@ -176,6 +183,7 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Routing Number"
+                      name="routing-number"
                       variant="outlined"
                       disabled={!editMode}
                       value={editData.details.routing_number}
@@ -188,11 +196,23 @@ const Profile = () => {
                 </>
               )}
               <Grid item xs={12}>
-                <Button variant="outlined" startIcon={editMode ? <CancelIcon /> : <EditIcon />} onClick={() => setEditMode(!editMode)}>
+                <Button
+                  variant="outlined"
+                  name="edit"
+                  startIcon={editMode ? <CancelIcon /> : <EditIcon />}
+                  onClick={() => setEditMode(!editMode)}
+                >
                   {editMode ? "Cancel" : "Edit"}
                 </Button>
                 {editMode && (
-                  <Button style={{ marginLeft: "10px" }} variant="contained" color="primary" startIcon={<SaveIcon />} onClick={saveEdits}>
+                  <Button
+                    style={{ marginLeft: "10px" }}
+                    variant="contained"
+                    name="save"
+                    color="primary"
+                    startIcon={<SaveIcon />}
+                    onClick={saveEdits}
+                  >
                     Save
                   </Button>
                 )}

@@ -138,7 +138,7 @@ const TaxDashboard = () => {
   return (
     <div>
       <h1>Tax Information Dashboard</h1>
-      <Button variant="contained" onClick={() => handleOpenTaxDialog()}>
+      <Button name="new-tax" variant="contained" onClick={() => handleOpenTaxDialog()}>
         Add New Tax
       </Button>
       <TableContainer component={Paper} style={{ margin: "25px 0" }}>
@@ -168,7 +168,7 @@ const TaxDashboard = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="contained" onClick={() => handleOpenTaxTypeDialog()} style={{ marginLeft: "10px" }}>
+      <Button name="new-tax-type" variant="contained" onClick={() => handleOpenTaxTypeDialog()} style={{ marginLeft: "10px" }}>
         Add New Tax Type
       </Button>
       <TableContainer component={Paper} style={{ margin: "25px 0" }}>

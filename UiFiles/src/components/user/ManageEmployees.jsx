@@ -126,7 +126,7 @@ const ManageEmployees = () => {
   const renderRoleSelector = () => (
     <FormControl fullWidth margin="dense">
       <InputLabel>Role</InputLabel>
-      <Select label="Role" name="role" disabled={isEditing} value={editableEmployee.role} onChange={handleChange}>
+      <Select label="Role" name="role" id="select-role" disabled={isEditing} value={editableEmployee.role} onChange={handleChange}>
         <MenuItem value="ptemployee">Part-Time Employee</MenuItem>
         <MenuItem value="manager">Manager</MenuItem>
       </Select>
@@ -182,7 +182,7 @@ const ManageEmployees = () => {
                   {role === "ptemployee" && <TableCell>{emp.details?.account_number || "N/A"}</TableCell>}
                   {role === "ptemployee" && <TableCell>{emp.details?.routing_number || "N/A"}</TableCell>}
                   <TableCell>
-                    <IconButton onClick={() => handleDialogOpen(emp)}>
+                    <IconButton id={`edit-${emp.id}`} onClick={() => handleDialogOpen(emp)}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>
@@ -203,7 +203,7 @@ const ManageEmployees = () => {
   return (
     <div>
       {role === "admin" && (
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleDialogOpen()}>
+        <Button variant="contained" name="add-new-employee" startIcon={<AddIcon />} onClick={() => handleDialogOpen()}>
           Add New Employee
         </Button>
       )}
@@ -252,7 +252,7 @@ const ManageEmployees = () => {
                 type="number"
                 fullWidth
                 variant="outlined"
-                name="pay_per_hour"
+                name="pay-per-hour"
                 value={editableEmployee.details.pay_per_hour}
                 onChange={handleChange}
               />
@@ -285,7 +285,9 @@ const ManageEmployees = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={saveEmployee}>Save</Button>
+          <Button name="save" onClick={saveEmployee}>
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
       {(role === "admin" ? ["ptemployee", "manager"] : ["ptemployee"]).map((role) => (

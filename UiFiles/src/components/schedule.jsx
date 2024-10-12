@@ -159,7 +159,9 @@ const Schedules = () => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSave}>{isEditing ? "Update" : "Create"}</Button>
+        <Button name="create" onClick={handleSave}>
+          {isEditing ? "Update" : "Create"}
+        </Button>
       </DialogActions>
     </Dialog>
   );
@@ -168,7 +170,7 @@ const Schedules = () => {
     <div>
       <h1>Employee Shifts</h1>
       {role !== "ptemployee" && (
-        <Button variant="contained" style={{ margin: "0 0 20px 0" }} color="primary" onClick={() => handleOpen()}>
+        <Button name="add-schedule" variant="contained" style={{ margin: "0 0 20px 0" }} color="primary" onClick={() => handleOpen()}>
           Add Schedule
         </Button>
       )}

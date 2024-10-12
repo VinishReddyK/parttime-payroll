@@ -5,7 +5,7 @@ module.exports = {
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
   settings: { react: { version: "18.2" } },
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "cypress"],
   rules: {
     "react/prop-types": 0,
     "react/jsx-no-target-blank": "off",
