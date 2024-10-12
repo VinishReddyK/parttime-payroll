@@ -7,3 +7,4 @@ export default defineConfig({
     },
   },
 });
+// yarn cypress run --spec "cypress/e2e/**" --headed --browser chrome
