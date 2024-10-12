@@ -15,7 +15,7 @@ async function hash(plain) {
 }
 
 router.post("/new", async (req, res) => {
-  const { name, email, password, role, pay_per_hour } = req.body;
+  const { name, email, password, role, details } = req.body;
   const org_name = req.org_name;
 
   const db = await getDatabaseInstance("./parttime_payroll.sqlite");
@@ -43,7 +43,7 @@ router.post("/new", async (req, res) => {
       const org_db = await getDatabaseInstance(org.id + "_" + org_name + ".sqlite");
       const insertPTEmpstmt = await org_db.prepare("INSERT INTO parttimeemployee (uid, pay_per_hour) VALUES (?, ?)");
       try {
-        await insertPTEmpstmt.run(userId, pay_per_hour || 10);
+        await insertPTEmpstmt.run(userId, details.pay_per_hour || 10);
       } catch (error) {
         throw error;
       } finally {
