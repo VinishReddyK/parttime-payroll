@@ -17,7 +17,7 @@ const payslipsAPIs = require("./routes/payroll/payslips");
 const employeesAPIs = require("./routes/employee");
 
 const app = express();
-const port = 3000;
+const port = 3101;
 
 app.use(cors());
 app.use(express.json());
@@ -25,22 +25,25 @@ app.use(express.urlencoded({ extended: true }));
 
 initDatabase();
 
-app.use("/signup", signupAPIs);
-app.use("/login", loginAPIs);
+const apiRouter = express.Router();
+app.use("/api", apiRouter);
 
-app.use(verify);
+apiRouter.use("/signup", signupAPIs);
+apiRouter.use("/login", loginAPIs);
 
-app.use("/adduser", addUserAPI);
-app.use("/profile", profileAPI);
-app.use("/schedule", scheduleAPIs);
-app.use("/swap", swapAPIs);
-app.use("/leave", leaveAPIs);
-app.use("/overtime", overtimeAPIs);
-app.use("/timesheet", timesheetAPIs);
-app.use("/taxtypes", taxtypesAPIs);
-app.use("/tax", taxAPIs);
-app.use("/payslips", payslipsAPIs);
-app.use("/employees", employeesAPIs);
+apiRouter.use(verify);
+
+apiRouter.use("/adduser", addUserAPI);
+apiRouter.use("/profile", profileAPI);
+apiRouter.use("/schedule", scheduleAPIs);
+apiRouter.use("/swap", swapAPIs);
+apiRouter.use("/leave", leaveAPIs);
+apiRouter.use("/overtime", overtimeAPIs);
+apiRouter.use("/timesheet", timesheetAPIs);
+apiRouter.use("/taxtypes", taxtypesAPIs);
+apiRouter.use("/tax", taxAPIs);
+apiRouter.use("/payslips", payslipsAPIs);
+apiRouter.use("/employees", employeesAPIs);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);

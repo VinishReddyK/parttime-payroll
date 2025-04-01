@@ -4,7 +4,10 @@ import { Alert } from "antd";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const api = axios.create({
-  baseURL: `${window.location.protocol}//${window.location.hostname}:3000`,
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? `http://${window.location.hostname}:3101/api` // Local development (port 3101)
+      : `${window.location.protocol}//${window.location.hostname}/api`, // Production
   timeout: 10000,
 });
 
